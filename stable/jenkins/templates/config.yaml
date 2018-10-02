@@ -13,10 +13,16 @@ data:
       <numExecutors>0</numExecutors>
       <mode>NORMAL</mode>
       <useSecurity>{{ .Values.Master.UseSecurity }}</useSecurity>
-      <authorizationStrategy class="hudson.security.FullControlOnceLoggedInAuthorizationStrategy">
-        <denyAnonymousReadAccess>true</denyAnonymousReadAccess>
+      <authorizationStrategy class="{{ .Values.Master.AuthorizationStrategyClass }}">
+        {{- range $attribute := .Values.Master.AuthorizationStrategyAttributes }}
+          <{{- $attribute.name }}>{{- $attribute.value }}</{{- $attribute.name }}>
+        {{- end}}
       </authorizationStrategy>
-      <securityRealm class="hudson.security.LegacySecurityRealm"/>
+      <securityRealm class="{{ .Values.Master.SecurityRealmClass }}">
+        {{- range $attribute := .Values.Master.SecurityRealmAttributes }}
+          <{{- $attribute.name }}>{{- $attribute.value }}</{{- $attribute.name }}>
+        {{- end}}
+      </securityRealm>
       <disableRememberMe>false</disableRememberMe>
       <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
       <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULLNAME}</workspaceDir>
