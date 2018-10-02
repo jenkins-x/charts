@@ -26,6 +26,7 @@ Master:
       value: 'true'
   SecurityRealmClass: "hudson.security.LegacySecurityRealm"
   SecurityRealmAttributes: {}
+  ServiceAccountAnnotations: {}
   Cpu: "200m"
   Memory: "256Mi"
   # Environment variables that get added to the init container (useful for e.g. http_proxy)
