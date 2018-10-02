@@ -38,7 +38,7 @@ The following tables list the configurable parameters of the Jenkins chart and t
 | `Master.DockerConfig   `          | Docker pull secret yml               | `{}`                                                        |
 | `Master.Component`                | k8s selector key                     | `jenkins-master`                                                             |
 | `Master.UseSecurity`              | Use basic security                   | `true`                                                                       |
-| `Master.AuthorizationStrategyClass`              | AuthorizationStrategy class                   | `hudson.security.FullControlOnceLoggedInAuthorizationStrateg`                                                                       |
+| `Master.AuthorizationStrategyClass`              | AuthorizationStrategy class                   | `hudson.security.FullControlOnceLoggedInAuthorizationStrategy`                                                                       |
 | `Master.AuthorizationStrategyAttributes`              | List of authorization strategy attributes                   | `denyAnonymousReadAccess: true`                                                                       |
 | `Master.SecurityRealmClass`              | SecurityRealmClass class                   | `hudson.security.LegacySecurityRealm`                                                                       |
 | `Master.SecurityRealmAttributes`              | List of security realm attributes                   | `{}`                                                                       |
