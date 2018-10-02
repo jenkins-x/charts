@@ -20,6 +20,13 @@ Master:
   UseSecurity: true
   AdminUser: admin
   # AdminPassword: <defaults to random>
+  AuthorizationStrategyClass: "hudson.security.FullControlOnceLoggedInAuthorizationStrategy"
+  AuthorizationStrategyAttributes:
+    - name: 'denyAnonymousReadAccess'
+      value: 'true'
+  SecurityRealmClass: "hudson.security.LegacySecurityRealm"
+  SecurityRealmAttributes: {}
+  ServiceAccountAnnotations: {}
   Cpu: "200m"
   Memory: "256Mi"
   # Environment variables that get added to the init container (useful for e.g. http_proxy)
