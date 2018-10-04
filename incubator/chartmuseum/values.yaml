@@ -112,7 +112,7 @@ tolerations: []
 affinity: {}
 
 persistence:
-  enabled: false
+  enabled: true
   accessMode: ReadWriteOnce
   size: 8Gi
   ## A manually managed Persistent Volume and Claim
