@@ -10,6 +10,7 @@ Master:
   ImagePullPolicy: "Always"
   Component: "jenkins-master"
   UseSecurity: true
+  #SecurityRealm
   AdminUser: admin
 # AdminPassword: <defaults to random>
   AuthorizationStrategyClass: "hudson.security.FullControlOnceLoggedInAuthorizationStrategy"
@@ -19,6 +20,8 @@ Master:
   SecurityRealmClass: "hudson.security.LegacySecurityRealm"
   SecurityRealmAttributes: {}
   ServiceAccountAnnotations: {}
+  # Master Service Labels
+  ServiceLabels: {}
   Cpu: "200m"
   Memory: "256Mi"
 # Set min/max heap here if needed with:
@@ -88,6 +91,7 @@ Master:
   Overwrite: {}
     # Plugins: true
     # Config: true
+  AdditionalConfig: {}
 
 Agent:
   Enabled: true
@@ -134,7 +138,7 @@ Agent:
       #   mountPath: /var/myapp/mysecret
       NodeSelector: {}
 
-Servers:  
+Servers:
   Gitea:
   #- Name: myname
   #  Url: https://something.com/

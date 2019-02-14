@@ -34,6 +34,8 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `Master.ImagePullPolicy`          | Master image pull policy             | `Always`                                                                     |
 | `Master.Component`                | k8s selector key                     | `jenkins-master`                                                             |
 | `Master.UseSecurity`              | Use basic security                   | `true`                                                                       |
+| `Master.SecurityRealm`            | Custom Security Realm                | Not set                                                                      |
+| `Master.ServiceLabels`            | Custom Service labels                | Not set                                                                      |
 | `Master.AuthorizationStrategyClass`              | AuthorizationStrategy class                   | `hudson.security.FullControlOnceLoggedInAuthorizationStrategy`                                                                       |
 | `Master.AuthorizationStrategyAttributes`              | List of authorization strategy attributes                   | `denyAnonymousReadAccess: true`                                                                       |
 | `Master.SecurityRealmClass`              | SecurityRealmClass class                   | `hudson.security.LegacySecurityRealm`                                                                       |
@@ -53,6 +55,7 @@ The following tables lists the configurable parameters of the Jenkins chart and 
 | `Master.LoadBalancerIP`           | Optional fixed external IP           | Not set                                                                      |
 | `Master.JMXPort`                  | Open a port, for JMX stats           | Not set                                                                      |
 | `Master.CustomConfigMap`          | Use a custom ConfigMap               | `false`                                                                      |
+| `Master.AdditionalConfig`          | Add additional config files         | `{}`                                                                         |
 | `Master.Ingress.Annotations`      | Ingress annotations                  | `{}`                                                                         |
 | `Master.Ingress.TLS`              | Ingress TLS configuration            | `[]`                                                                         |
 | `Master.InitScripts`              | List of Jenkins init scripts         | Not set                                                                      |
@@ -111,6 +114,43 @@ For Kubernetes v1.5 & v1.6, you must also turn on NetworkPolicy by setting
 the DefaultDeny namespace annotation. Note: this will enforce policy for _all_ pods in the namespace:
 
     kubectl annotate namespace default "net.beta.kubernetes.io/network-policy={\"ingress\":{\"isolation\":\"DefaultDeny\"}}"
+
+## Adding customized securityRealm
+
+ `Master.SecurityRealm` in values can be used to support custom security realm instead of default `LegacySecurityRealm`. For example, you can add a security realm to authenticate via keycloak.
+
+ ```yaml
+SecurityRealm: |-
+  <securityRealm class="org.jenkinsci.plugins.oic.OicSecurityRealm" plugin="oic-auth@1.0">
+    <clientId>testId</clientId>
+    <clientSecret>testsecret</clientSecret>
+    <tokenServerUrl>https:testurl</tokenServerUrl>
+    <authorizationServerUrl>https:testAuthUrl</authorizationServerUrl>
+    <userNameField>email</userNameField>
+    <scopes>openid email</scopes>
+  </securityRealm>
+```
+
+ ## Adding additional configs
+
+ `Master.AdditionalConfig` can be used to add additional config files in `config.yaml`. For example, it can be used to add additional config files for keycloak authentication.
+
+ ```yaml
+AdditionalConfig:
+  testConfig.txt: |-
+    - name: testName
+      clientKey: testKey
+      clientURL: testUrl
+```
+
+ ## Adding customized labels
+
+ `Master.ServiceLabels` can be used to add custom labels in `jenkins-master-svc.yaml`. For example,
+
+ ```yaml
+ServiceLabels:
+  expose: true
+```
 
 ## Persistence
 
