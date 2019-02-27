@@ -18,11 +18,11 @@ data:
           <{{- $attribute.name }}>{{- $attribute.value }}</{{- $attribute.name }}>
         {{- end}}
       </authorizationStrategy>
-      <securityRealm class="{{ .Values.Master.SecurityRealmClass }}">
-        {{- range $attribute := .Values.Master.SecurityRealmAttributes }}
-          <{{- $attribute.name }}>{{- $attribute.value }}</{{- $attribute.name }}>
-        {{- end}}
-      </securityRealm>
+{{- if .Values.Master.SecurityRealm }}
+{{ .Values.Master.SecurityRealm | indent 6 }}
+{{- else }}
+      <securityRealm class="hudson.security.LegacySecurityRealm"/>
+{{- end }}
       <disableRememberMe>false</disableRememberMe>
       <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
       <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULLNAME}</workspaceDir>
@@ -275,6 +275,11 @@ data:
     mkdir -p /var/jenkins_home/init.groovy.d/;
     cp -n /var/jenkins_config/*.groovy /var/jenkins_home/init.groovy.d/
 {{- end }}
+{{- if .Values.Master.AdditionalConfig }}
+{{- range $key, $val := .Values.Master.AdditionalConfig }}
+    cp /var/jenkins_config/{{- $key }} /var/jenkins_home;
+{{- end }}
+{{- end }}
 {{- range $key, $val := .Values.Master.InitScripts }}
   init{{ $key }}.groovy: |-
 {{ $val | indent 4 }}
@@ -284,5 +289,8 @@ data:
 {{- range $index, $val := .Values.Master.InstallPlugins }}
 {{ $val | indent 4 }}
 {{- end }}
+{{- end }}
+{{- if .Values.Master.AdditionalConfig }}
+{{- toYaml .Values.Master.AdditionalConfig | indent 2 }}
 {{- end }}
 {{- end -}}
