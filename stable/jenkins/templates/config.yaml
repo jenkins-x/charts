@@ -19,7 +19,12 @@ data:
         {{- end}}
       </authorizationStrategy>
 {{- if .Values.Master.SecurityRealm }}
-{{ .Values.Master.SecurityRealm | indent 6 }}
+    {{ .Values.Master.SecurityRealm | indent 6 }}
+{{- else if  .Values.Master.SecurityRealmClass }}
+      <securityRealm class="{{ .Values.Master.SecurityRealmClass }}">
+        {{- range $attribute := .Values.Master.SecurityRealmAttributes }}
+          <{{- $attribute.name }}>{{- $attribute.value }}</{{- $attribute.name }}>
+      </securityRealm>
 {{- else }}
       <securityRealm class="hudson.security.LegacySecurityRealm"/>
 {{- end }}
