@@ -24,6 +24,7 @@ data:
       <securityRealm class="{{ .Values.Master.SecurityRealmClass }}">
         {{- range $attribute := .Values.Master.SecurityRealmAttributes }}
           <{{- $attribute.name }}>{{- $attribute.value }}</{{- $attribute.name }}>
+        {{- end}}
       </securityRealm>
 {{- else }}
       <securityRealm class="hudson.security.LegacySecurityRealm"/>
