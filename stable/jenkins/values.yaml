@@ -102,6 +102,10 @@ Agent:
   DockerMountPath: "/var/run/docker.sock"
 
   KubernetesServerURL: "https://kubernetes.default"
+  
+  #Set to true when http proxy env variables are set (in Docker engine/Jenkins global configuration/template pods) to add empty "http_proxy" and "https_proxy" in the Jnlp containers.
+  #Required for connectivity between Jnlp agent and Jenkins master containers on cluster that uses http/https proxy, as the Jnlp does not respect the no_proxy env variable.
+  JnlpSetEmptyHttpProxyEnvVars: false
 
   # Key Value selectors. Ex:
   # jenkins-agent: v1
