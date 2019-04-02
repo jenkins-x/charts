@@ -90,6 +90,18 @@ data:
                   <resourceRequestMemory>{{ $cval.RequestMemory }}</resourceRequestMemory>
                   <resourceLimitCpu>{{ $cval.LimitCpu }}</resourceLimitCpu>
                   <resourceLimitMemory>{{ $cval.LimitMemory }}</resourceLimitMemory>
+  {{- if and (eq $ckey "Jnlp") $agent.JnlpSetEmptyHttpProxyEnvVars }}
+                  <envVars>
+                    <org.csanchez.jenkins.plugins.kubernetes.model.KeyValueEnvVar>
+                      <key>http_proxy</key>
+                      <value></value>
+                    </org.csanchez.jenkins.plugins.kubernetes.model.KeyValueEnvVar>
+                    <org.csanchez.jenkins.plugins.kubernetes.model.KeyValueEnvVar>
+                      <key>https_proxy</key>
+                      <value></value>
+                    </org.csanchez.jenkins.plugins.kubernetes.model.KeyValueEnvVar>
+                  </envVars>
+  {{- end }}
                 </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
 {{- end }}
               </containers>
