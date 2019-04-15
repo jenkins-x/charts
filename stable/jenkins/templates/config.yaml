@@ -42,6 +42,7 @@ data:
           <name>kubernetes</name>
           <templates>
           </templates>
+{{- $agent := .Values.Agent -}}
           <serverUrl>{{ $agent.KubernetesServerURL | default "https://kubernetes.default" }}</serverUrl>
           <skipTlsVerify>false</skipTlsVerify>
           <namespace>{{ .Release.Namespace }}</namespace>
