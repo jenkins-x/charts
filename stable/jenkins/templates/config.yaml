@@ -41,91 +41,6 @@ data:
         <org.csanchez.jenkins.plugins.kubernetes.KubernetesCloud plugin="kubernetes@0.11">
           <name>kubernetes</name>
           <templates>
-{{- $agent := .Values.Agent -}}
-{{- if .Values.Agent.Enabled }}
-{{- range $pkey, $pval := .Values.Agent.PodTemplates }}
-            <org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
-              <inheritFrom></inheritFrom>
-              <name>{{ $pval.Name }}</name>
-{{- if $pval.ServiceAccount }}
-              <serviceAccount>{{ $pval.ServiceAccount }}</serviceAccount>
-{{- end }}
-              <instanceCap>2147483647</instanceCap>
-              <idleMinutes>0</idleMinutes>
-              <label>{{ $pval.Label }}</label>
-              <nodeSelector>
-                {{- $local := dict "first" true }}
-                {{- range $key, $value := $pval.NodeSelector }}
-                  {{- if not $local.first }},{{- end }}
-                  {{- $key }}={{ $value }}
-                  {{- $_ := set $local "first" false }}
-                {{- end }}</nodeSelector>
-              <volumes>
-{{- if $agent.DockerHostPath }}
-                <org.csanchez.jenkins.plugins.kubernetes.volumes.HostPathVolume>
-                  <hostPath>{{ $agent.DockerHostPath }}</hostPath>
-                  <mountPath>{{ $agent.DockerMountPath }}</mountPath>
-                </org.csanchez.jenkins.plugins.kubernetes.volumes.HostPathVolume>
-{{- end }}
-{{- range $index, $volume := $pval.volumes }}
-                <org.csanchez.jenkins.plugins.kubernetes.volumes.{{ $volume.type }}Volume>
-{{- range $key, $value := $volume }}{{- if not (eq $key "type") }}
-                  <{{ $key }}>{{ $value }}</{{ $key }}>
-{{- end }}{{- end }}
-                </org.csanchez.jenkins.plugins.kubernetes.volumes.{{ $volume.type }}Volume>
-{{- end }}
-              </volumes>
-              <containers>
-{{- range $ckey, $cval := $pval.Containers }}
-                <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
-                  <name>{{ $ckey | lower }}</name>
-                  <image>{{ $cval.Image }}</image>
-                  <privileged>{{ default false $cval.Privileged }}</privileged>
-                  <alwaysPullImage>{{ $cval.AlwaysPullImage }}</alwaysPullImage>
-                  <workingDir>/home/jenkins</workingDir>
-                  <command>{{ $cval.Command }}</command>
-                  <args>{{ $cval.Args }}</args>
-                  <ttyEnabled>{{ default false $cval.Tty }}</ttyEnabled>
-                  <resourceRequestCpu>{{ $cval.RequestCpu }}</resourceRequestCpu>
-                  <resourceRequestMemory>{{ $cval.RequestMemory }}</resourceRequestMemory>
-                  <resourceLimitCpu>{{ $cval.LimitCpu }}</resourceLimitCpu>
-                  <resourceLimitMemory>{{ $cval.LimitMemory }}</resourceLimitMemory>
-                </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
-{{- end }}
-              </containers>
-              <envVars>
-{{- range $ekey, $eval := $pval.EnvVars }}
-                <org.csanchez.jenkins.plugins.kubernetes.ContainerEnvVar>
-                  <key>{{ $ekey }}</key>
-                  <value>{{ $eval }}</value>
-                </org.csanchez.jenkins.plugins.kubernetes.ContainerEnvVar>
-{{- end }}
-              </envVars>
-{{- if $pval.annotations }}
-              <annotations>
-  {{- range $Akey, $Avalue := $pval.annotations }}
-                <org.csanchez.jenkins.plugins.kubernetes.PodAnnotation>
-                  <key>{{ $Akey }}</key>
-                  <value>{{ $Avalue }}</value>
-                </org.csanchez.jenkins.plugins.kubernetes.PodAnnotation>
-  {{- end }}
-              </annotations>
-{{- else }}
-              <annotations/>
-{{- end }}
-{{- if $pval.ImagePullSecret }}
-              <imagePullSecrets>
-                <org.csanchez.jenkins.plugins.kubernetes.PodImagePullSecret>
-                  <name>{{ $pval.ImagePullSecret }}</name>
-                </org.csanchez.jenkins.plugins.kubernetes.PodImagePullSecret>
-              </imagePullSecrets>
-{{- else }}
-              <imagePullSecrets/>
-{{- end }}
-              <nodeProperties/>
-            </org.csanchez.jenkins.plugins.kubernetes.PodTemplate>
-{{- end }}
-{{- end -}}
           </templates>
           <serverUrl>{{ $agent.KubernetesServerURL | default "https://kubernetes.default" }}</serverUrl>
           <skipTlsVerify>false</skipTlsVerify>
@@ -264,8 +179,6 @@ data:
 {{- end }}
     mkdir -p /usr/share/jenkins/ref/secrets/;
     echo "false" > /usr/share/jenkins/ref/secrets/slave-to-master-security-kill-switch;
-    rm -rf /var/jenkins_home/config.xml
-    ln -s /var/jenkins_config/config.xml /var/jenkins_home/config.xml
     rm -rf /var/jenkins_home/com.cloudbees.jenkins.plugins.bitbucket.endpoints.BitbucketEndpointConfiguration.xml
     ln -s /var/jenkins_config/com.cloudbees.jenkins.plugins.bitbucket.endpoints.BitbucketEndpointConfiguration.xml /var/jenkins_home/com.cloudbees.jenkins.plugins.bitbucket.endpoints.BitbucketEndpointConfiguration.xml
     rm -rf /var/jenkins_home/org.jenkinsci.plugin.gitea.servers.GiteaServers.xml

@@ -37,6 +37,14 @@ spec:
         runAsUser: 0
       serviceAccountName: {{ if .Values.rbac.install }}{{ template "jenkins.fullname" . }}{{ else }}"{{ .Values.rbac.serviceAccountName }}"{{ end }}
       initContainers:
+        - name: "create-jenkins-config"
+          image: "jenkinsxio/jx:2.0.1"
+          imagePullPolicy: "IfNotPresent"
+          command: [ "jx", "step", "create", "jenkins", "config", "-o", "/var/jenkins_home/config.xml"]
+          volumeMounts:
+            -
+              mountPath: /var/jenkins_home
+              name: jenkins-home
         - name: "copy-default-config"
           image: "{{ .Values.Master.Image }}:{{ .Values.Master.ImageTag }}"
           imagePullPolicy: "{{ .Values.Master.ImagePullPolicy }}"
