@@ -1,6 +1,6 @@
 {{- $agent := .Values.Agent -}}
 {{- range $pkey, $pval := .Values.Agent.PodTemplates }}
-apiVersion: v1                                          x
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: "jenkins-pod-xml-{{ $pval.Name }}"
