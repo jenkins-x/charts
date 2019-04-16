@@ -1,7 +1,7 @@
 CHART_REPO := https://chartmuseum.infra.jrawlings.co.uk
 NAME := jenkins
 OS := $(shell uname)
-RELEASE_VERSION := 0.10.35
+RELEASE_VERSION := 0.10.36
 
 setup:
 	minikube addons enable ingress
