@@ -211,6 +211,6 @@ data:
 {{- end }}
 {{- end }}
 {{- if .Values.Master.AdditionalConfig }}
-{{- toYaml .Values.Master.AdditionalConfig | indent 2 }}
+{{ toYaml .Values.Master.AdditionalConfig | indent 2 }}
 {{- end }}
 {{- end -}}
