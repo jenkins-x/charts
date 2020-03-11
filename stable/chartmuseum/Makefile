@@ -1,4 +1,4 @@
-CHART_REPO := https://chartmuseum.infra.jrawlings.co.uk
+CHART_REPO := https://chartmuseum-jx.jenkins-x.live
 NAME := chartmuseum
 OS := $(shell uname)
 RELEASE_VERSION := 1.1.6
