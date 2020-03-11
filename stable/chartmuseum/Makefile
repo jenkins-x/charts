@@ -1,7 +1,7 @@
 CHART_REPO := https://chartmuseum.infra.jrawlings.co.uk
 NAME := chartmuseum
 OS := $(shell uname)
-RELEASE_VERSION := 1.1.5
+RELEASE_VERSION := 1.1.6
 
 setup:
 	minikube addons enable ingress
